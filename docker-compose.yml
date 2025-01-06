@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: review_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8006:8006"
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+    networks:
+      - app_network
+
+  redis:
+    container_name: review_redis
+    image: redis:7
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
