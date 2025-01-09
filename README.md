@@ -16,7 +16,7 @@ Below is a step-by-step guide to set up, run, and use the FastAPI application.
 Make sure the following tools are installed on your system:
 
     Docker: Ensure Docker is installed and running.
-        Download Docker
+    Download Docker
     Docker Compose: Comes pre-installed with Docker Desktop.
     Python 3.10 or later: If testing locally without Docker.
     Poetry: For dependency management and environment setup.
@@ -64,8 +64,8 @@ You should see two services:
 
 Access the application at:
 
-    http://127.0.0.1:8006/docs: Interactive API documentation (Swagger UI).
-    http://127.0.0.1:8006/redoc: Alternative API documentation.
+    http://127.0.0.1:8000/docs: Interactive API documentation (Swagger UI).
+    http://127.0.0.1:8000/redoc: Alternative API documentation.
 
 ### 5. Run Locally (Without Docker)
 
@@ -81,9 +81,9 @@ Run Redis Locally: If Redis is not already running, start it on your machine. Yo
 
 Start the Application: Run the FastAPI application:
 
-    poetry run uvicorn main:app --host 0.0.0.0 --port 8006
+    poetry run uvicorn main:app --host 0.0.0.0 --port 8000
 
-Access the Application: http://127.0.0.1:8006/docs
+Access the Application: http://127.0.0.1:8000/docs
     
 # Part-2 - What if
 
