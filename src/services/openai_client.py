@@ -1,5 +1,6 @@
 import openai
 
+
 class OpenAIClient:
     def __init__(self, openai_key: str):
         openai.api_key = openai_key
@@ -14,13 +15,11 @@ class OpenAIClient:
 
         try:
             response = openai.chat.completions.create(
-                model="gpt-4-turbo",
+                model="gpt-5-nano",
                 messages=[
                     {"role": "system", "content": "You are an experienced code reviewer."},
                     {"role": "user", "content": prompt},
-                ], 
-                max_tokens=1000,
-                temperature=0.7
+                ],
             )
             answer = response.choices[0].message.content
             return {
@@ -28,5 +27,3 @@ class OpenAIClient:
             }
         except openai.OpenAIError as e:
             raise RuntimeError(f"Error OpenAI API: {str(e)}")
-
-        

@@ -3,6 +3,7 @@ import aiohttp
 
 from redis.asyncio import Redis
 
+
 class GitHubClient:
     def __init__(self, github_token: str, redis_client: Redis):
         self.github_token = github_token
@@ -15,13 +16,13 @@ class GitHubClient:
     def parse_parts_url(self, url: str):
         if not url.startswith("https://github.com/"):
             raise ValueError("URL is not a valid GitHub repository")
-        
+
         parts = url.replace("https://github.com/", "").split("/")
 
         if len(parts) < 2:
             raise ValueError("Incorrect URL format")
         return parts[0], parts[1]
-    
+
     async def fetch_file_content(self, url: str) -> str:
         async with aiohttp.ClientSession() as session:
             try:
@@ -31,7 +32,7 @@ class GitHubClient:
                     text = await response.text()
                     return text
             except Exception as e:
-                raise RuntimeError(f"Error downloading a file: {str(e)}") 
+                raise RuntimeError(f"Error downloading a file: {str(e)}")
 
     async def fetch_repo_content(self, url: str):
         cache_key = f"repo_cache:{url}"
@@ -49,10 +50,10 @@ class GitHubClient:
             owner, repo = self.parse_parts_url(url)
         except ValueError as e:
             raise RuntimeError(f"Incorrect GitHub URL: {str(e)}")
-        
+
         async with aiohttp.ClientSession() as session:
             api_url = f"https://api.github.com/repos/{owner}/{repo}/contents"
-            try:    
+            try:
                 async with session.get(url=api_url, headers=self.headers) as response:
                     if response.status != 200:
                         text = await response.text()
@@ -66,15 +67,15 @@ class GitHubClient:
         for info in files:
             if info["type"] == "file":
                 filename = info["name"]
-                found_files.append(filename) 
-                
+                found_files.append(filename)
+
                 content = await self.fetch_file_content(info["url"])
                 files_content.append(f"File:{filename}\n{content}\n")
-        
+
         repo_data = {
             "found_files": found_files,
             "files_content": files_content
-        }  
-    
+        }
+
         await self.redis_client.set(cache_key, json.dumps(repo_data), ex=3600)
         return repo_data
